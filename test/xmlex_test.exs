@@ -39,4 +39,41 @@ defmodule XmlexTest do
 	assert xml_binary == xml_binary |> Xmlex.decode! |> Xmlex.encode!
   end
 
+  test "xpath" do
+  	raw_xml = """
+  	<ROOT>
+  		<child a="1">
+  			<subchild a="1">
+  				subchild1
+  			</subchild>
+  		</child>
+  		<child>
+   			<subchild a="2">
+  				subchild2
+  			</subchild>
+   			<subchild a="3">
+  				subchild3
+  			</subchild>
+  		</child>
+   		<child>
+   			<subchild b="4">
+  				subchild4
+  			</subchild>
+  		</child>
+  	</ROOT>
+  	"""
+	decoded_xml = Xmlex.decode!(raw_xml)
+
+  	assert Xmlex.get(decoded_xml, %{path: [:ROOT, :child, :subchild], target: %{attr: :a}}) == ["1", "2", "3"]
+	assert Xmlex.get(decoded_xml, %{path: [:ROOT, :child, :subchild], target: %{attr: :b}}) == ["4"]
+	assert Xmlex.get(decoded_xml, %{path: [:ROOT, :child, :subchild], target: :tagtext}) == ["subchild1", "subchild2", "subchild3", "subchild4"]
+	assert Xmlex.get(decoded_xml, %{path: [:ROOT, :child], target: %{attr: :a}}) == ["1"]
+
+  	assert Xmlex.get(raw_xml, %{path: [:ROOT, :child, :subchild], target: %{attr: :a}}) == ["1", "2", "3"]
+	assert Xmlex.get(raw_xml, %{path: [:ROOT, :child, :subchild], target: %{attr: :b}}) == ["4"]
+	assert Xmlex.get(raw_xml, %{path: [:ROOT, :child, :subchild], target: :tagtext}) == ["subchild1", "subchild2", "subchild3", "subchild4"]
+	assert Xmlex.get(raw_xml, %{path: [:ROOT, :child], target: %{attr: :a}}) == ["1"]
+
+  end
+
 end

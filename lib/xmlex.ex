@@ -39,5 +39,21 @@ defmodule Xmlex do
     Xmlex.Encoder.encode!(content)
   end
   
+  def get!(content, path) when is_binary(content) do
+    decode!(content)
+      |> Xmlex.Xpath.get(path)
+  end
+  def get!(content, path) do
+    Xmlex.Xpath.get(content, path)
+  end
+
+  def get(content, path) do
+    case ExTask.run(fn() -> get!(content, path) end) |> ExTask.await(:infinity) do
+      {:result, lst} when is_list(lst) -> lst
+      err -> {:error, err}
+    end
+  end
+  
+
 
 end
