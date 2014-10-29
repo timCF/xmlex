@@ -21,7 +21,7 @@ defmodule Xmlex.Encoder do
 				 	|> to_string
 	end
 
-	defp recurs_encode(%Xmlex.XML{tagname: tagname, tagtext: tagtext, attrs: attrs, childs: childs}) when (is_atom(tagname) and is_binary(tagtext) and (is_map(attrs)) and is_list(childs)) do
+	defp recurs_encode(%Xmlex.XML{tagname: tagname, tagtext: tagtext, attrs: attrs, childs: childs}) when (is_atom(tagname) and ( is_binary(tagtext) or is_atom(tagtext) or is_number(tagtext) ) and (is_map(attrs)) and is_list(childs)) do
 		{tagname, make_attrs_keylist(attrs), make_tagtext_and_childs(tagtext, childs)}
 	end
 
