@@ -7,13 +7,18 @@ defmodule Xmlex.Decoder do
 	def decode!(body) when is_binary(body) do
 		case try_parse_to_tree(body) do
 			res = {:error, _} -> raise "Xmlex parser error #{inspect res}"
-			some_else -> recurs_parse(some_else)
+			some_else -> %Xmlex.XML{} = recurs_parse(some_else)
 		end
 	end
 	def decode(body) when is_binary(body) do
 		case try_parse_to_tree(body) do
 			res = {:error, _} -> res
-			some_else -> recurs_parse(some_else)
+			some_else -> 
+				case ExTask.run(fn() ->  recurs_parse(some_else) end )
+						|> ExTask.await(:infinity) do
+					{:result, res = %Xmlex.XML{}} -> res
+					err -> {:error, err}
+				end
 		end
 	end
 	def decode(body) do
@@ -55,6 +60,10 @@ defmodule Xmlex.Decoder do
 		XmerlRecords.xmlText(data, :value) 
 			|> to_string
 				|> String.strip
+	end
+	# here we fixing bug when in xml are extra \n or \t symbols
+	defp get_text(_) do
+		""
 	end
 
 	# lst - list of xmlAttrs

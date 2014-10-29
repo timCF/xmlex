@@ -32,6 +32,12 @@ defmodule Xmlex do
     Xmlex.Decoder.decode!(str)
   end
   
+  def encode(content) do
+    Xmlex.Encoder.encode(content)
+  end
+  def encode!(content) do
+    Xmlex.Encoder.encode!(content)
+  end
   
 
 end
