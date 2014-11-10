@@ -76,4 +76,11 @@ defmodule XmlexTest do
 
   end
 
+  test "not throw exceptions" do
+    xml_bad_binary = "<BetradarLiveOdd timestamp=\"1260866431052\" time=\"840\" status=\"clearbet\" replytype=\"current\" replynr=\"4\"><Match status=\"1p\" matchtime=\"1\" matchid=\"935448\" clearedscore=\"0:0\" betstatus=\"stopped\" active=\"1\"><Odds typeid=\"7\" type=\"ft2w\" subtype=\"2\" id=\"247509\" freetext=\"Which team has kick off?\" combination=\"0\" active=\"1\"><OddsField type=\"1\" outcome=\"0\" active=\"1\"/><OddsField type=\"2\" outcome=\"1\" active=\"1\"/></Odds></Match></BetradarLiveOdds>"
+    assert %Xmlex.XML{} != Xmlex.decode(xml_bad_binary) |> IO.inspect
+    assert %Xmlex.XML{} != Xmlex.decode("trololo") |> IO.inspect
+    assert %Xmlex.XML{} != Xmlex.decode({:qwe}) |> IO.inspect
+  end
+
 end
