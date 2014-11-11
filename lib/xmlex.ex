@@ -18,12 +18,12 @@ defmodule Xmlex do
   end
 
   defmodule XML do
-    @derive [HashUtils]
     defstruct   tagname: nil,
           tagtext: "",
           attrs: %{},
           childs: []
   end
+  use Hashex, [Xmlex.XML]
 
   def decode(str) do
     Xmlex.Decoder.decode(str)
