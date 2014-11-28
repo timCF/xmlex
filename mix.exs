@@ -15,7 +15,8 @@ defmodule Xmlex.Mixfile do
     [applications:  [
                       :logger,
                       :hashex,
-                      :extask
+                      :extask,
+                      :xmerl
                     ],
      mod: {Xmlex, []}]
   end
